@@ -56,6 +56,7 @@ def write_csvs():
         'clinton_votepct'
     ]
 
+    ahca.select(include).to_csv('data/output/all.csv')
     trump.select(include).to_csv('data/output/trump_counties.csv')
     clinton.select(include).to_csv('data/output/clinton_counties.csv')
     rural.select(include).to_csv('data/output/rural_counties.csv')
