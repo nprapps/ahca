@@ -6,6 +6,6 @@ python combine_census.py
 python election.py
 
 # join
-csvjoin -c FIPS,"County FIPS",fips data/census.csv data/county.csv data/elex.csv > data/combined.csv
+csvjoin -c FIPS,FIPS,fips data/ahca.csv data/census.csv data/elex.csv > data/combined.csv
 
 # process
