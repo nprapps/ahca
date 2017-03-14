@@ -8,3 +8,4 @@ python election.py
 # join
 csvjoin -c FIPS,"County FIPS",fips data/census.csv data/county.csv data/elex.csv > data/combined.csv
 
+# process
