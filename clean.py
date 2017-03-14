@@ -6,7 +6,7 @@ sheet = wb.get_sheet_by_name('County ')
 county_data = sheet['A23':'D2622']
 
 with open('data/county.csv', 'w') as f:
-	writer = csv.writer(f)
-	for row in county_data:
-		writer.writerow([cell.value for cell in row])
+    writer = csv.writer(f)
+    for row in county_data:
+        writer.writerow([cell.value for cell in row])
 
