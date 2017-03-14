@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # create our data files
-python clean.py
+python clean_ahca.py
 python combine_census.py
 python election.py
 in2csv -f xls data/original/ruralurbancodes2013.xls | csvcut -c FIPS,RUCC_2013 > data/codes.csv
