@@ -1,7 +1,11 @@
 import agate
 import leather
 
-ahca = agate.Table.from_csv('data/combined.csv')
+specified_types = {
+    'FIPS': agate.Text()
+}
+
+ahca = agate.Table.from_csv('data/fixed_fips.csv', column_types=specified_types)
 
 trump = ahca.where(lambda r: r['trump_votepct'] > r['clinton_votepct'])
 clinton = ahca.where(lambda r: r['clinton_votepct'] > r['trump_votepct'])

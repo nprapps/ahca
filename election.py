@@ -21,7 +21,7 @@ def process_data():
                 continue
 
             output = {
-                'fips': fips
+                'FIPS': fips
             }
 
             for candidate in data:
@@ -32,8 +32,8 @@ def process_data():
 
 def write_csv():
     with open('data/elex.csv', 'w') as f:
-        fieldnames = ['fips', 'trump_votepct', 'clinton_votepct', 'johnson_votepct', 'stein_votepct', 'mcmullin_votepct', 'other_votepct']
-        writer = csv.DictWriter(f, fieldnames=fieldnames, restval=0)
+        fieldnames = ['FIPS', 'trump_votepct', 'clinton_votepct', 'johnson_votepct', 'stein_votepct', 'mcmullin_votepct', 'other_votepct']
+        writer = csv.DictWriter(f, fieldnames=fieldnames, restval=0, quotechar='"', quoting=csv.QUOTE_NONNUMERIC)
         writer.writeheader()
 
         for row in election_data:

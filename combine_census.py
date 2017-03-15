@@ -6,7 +6,7 @@ path = 'data/census'
 
 def process():
     with open('data/census.csv', 'w') as writefile:
-        writer = csv.writer(writefile)
+        writer = csv.writer(writefile, quotechar='"', quoting=csv.QUOTE_NONNUMERIC)
         writer.writerow(['FIPS', 'Population', 'Median Income', 'Percent White'])
 
         for filename in os.listdir('data/census'):
