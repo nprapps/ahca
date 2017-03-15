@@ -1,3 +1,5 @@
+.DS_Store
+*/.DS_Store
 data/*.csv
 data/output/*.csv
 *.svg
