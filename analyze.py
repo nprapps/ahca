@@ -87,6 +87,34 @@ def write_csvs():
     small_towns.select(include).to_csv('data/output/town_counties.csv')
     metro.select(include).to_csv('data/output/metro_counties.csv')
 
+
+    ages = ['27', '40', '60']
+    incomes = ['$20,000', '$30,000', '$40,000', '$50,000', '$75,000']
+    counties = [(rural, 'rural'), (small_towns, 'small_towns'), (metro, 'metro')]
+
+    column_names = ['county_type']
+    for age in ages:
+        for income in incomes:
+            column_names.append('dollar_diff_{0}yo_{1}k'.format(age, income[1:3]))
+    
+    column_types = [agate.Text()]
+    for i in range(15):
+        column_types.append(agate.Number())
+
+    rows = []
+    for county in counties:
+        row = [county[1]]
+        
+        for age in ages:
+            for income in incomes:
+                row.append(county[0].aggregate(agate.Mean('Dollar difference for {0} year old with {1} income'.format(age, income))))
+
+        rows.append(row)
+
+    table = agate.Table(rows, column_names, column_types).to_csv('data/output/means.csv')
+
+
+
 if __name__ == '__main__':
     print_breakdown()
     write_csvs()
