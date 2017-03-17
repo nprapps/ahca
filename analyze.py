@@ -7,19 +7,12 @@ specified_types = {
 
 ahca = agate.Table.from_csv('data/fixed_fips.csv', column_types=specified_types)
 
-trump = ahca.where(lambda r: r['trump_votepct'] > r['clinton_votepct'])
-clinton = ahca.where(lambda r: r['clinton_votepct'] > r['trump_votepct'])
+trump = ahca.where(lambda r: r['trump_votecount'] > r['clinton_votecount'])
+clinton = ahca.where(lambda r: r['clinton_votecount'] > r['trump_votecount'])
 
 rural = ahca.where(lambda r: r['RUCC_2013'] > 7)
 small_towns = ahca.where(lambda r: 3 < r['RUCC_2013'] <= 7)
 metro = ahca.where(lambda r: r['RUCC_2013'] <= 3)
-
-urban_towns = ahca.where(lambda r: 3 < r['RUCC_2013'] <= 5)
-tiny_towns = ahca.where(lambda r: 5 < r['RUCC_2013'] <= 7)
-
-
-adjacent = ahca.where(lambda r: r['RUCC_2013'] == 4 or r['RUCC_2013'] == 6 or r['RUCC_2013'] == 8)
-not_adjacent = ahca.where(lambda r: r['RUCC_2013'] == 5 or r['RUCC_2013'] == 7 or r['RUCC_2013'] == 9)
 
 def print_breakdown():
     ages = ['27', '40', '60']
@@ -29,50 +22,41 @@ def print_breakdown():
         for income in incomes:
             print(
                 '{0} with {1} \n'.format(age, income),
-                'Trump: ',
+                'Trump:',
                 trump.aggregate(agate.Mean('Dollar difference for {0} year old with {1} income'.format(age, income))),
                 '\n',
-                'Clinton: ',
+                'Clinton:',
                 clinton.aggregate(agate.Mean('Dollar difference for {0} year old with {1} income'.format(age, income))),
                 '\n',
-                'Rural: ',
+                'Rural:',
                 rural.aggregate(agate.Mean('Dollar difference for {0} year old with {1} income'.format(age, income))),
                 '\n',
-                'Urban towns: ',
-                urban_towns.aggregate(agate.Mean('Dollar difference for {0} year old with {1} income'.format(age, income))),
-                '\n',
-                'Tiny towns: ',
-                tiny_towns.aggregate(agate.Mean('Dollar difference for {0} year old with {1} income'.format(age, income))),
-                '\n',
-                'Small Towns (urban + tiny): ',
+                'Small Towns:',
                 small_towns.aggregate(agate.Mean('Dollar difference for {0} year old with {1} income'.format(age, income))),
                 '\n',
-                'Metro: ',
-                metro.aggregate(agate.Mean('Dollar difference for {0} year old with {1} income'.format(age, income))),
-                '\n',
-                'Adjacent to metro: ',
-                adjacent.aggregate(agate.Mean('Dollar difference for {0} year old with {1} income'.format(age, income))),
-                '\n',
-                'Not adjacent to metro: ',
-                not_adjacent.aggregate(agate.Mean('Dollar difference for {0} year old with {1} income'.format(age, income)))
+                'Metro:',
+                metro.aggregate(agate.Mean('Dollar difference for {0} year old with {1} income'.format(age, income)))
             )
 
+    print(
+        'Trump vote percentage in rural counties:',
+        calculate_trump_pct(rural),
+        '\n',
+        'Trump vote percentage in small town counties:',
+        calculate_trump_pct(small_towns),
+        '\n',
+        'Trump vote percentage in metro counties:',
+        calculate_trump_pct(metro),
+    )
 
-def charts():
-    column_names = ['group', 'difference']
-    column_types = [agate.Text(), agate.Number()]
+def calculate_trump_pct(table):
+    trump_total = table.aggregate(agate.Sum('trump_votecount'))
 
-    rows = [
-        ('60 $20,000 not adjacent', not_adjacent.aggregate(agate.Mean('Dollar difference for 60 year old with $20,000 income'))),
-        ('60 $20,000 adjacent', adjacent.aggregate(agate.Mean('Dollar difference for 60 year old with $20,000 income'))),
-        ('60 $20,000 metro', metro.aggregate(agate.Mean('Dollar difference for 60 year old with $20,000 income')))
-    ]
+    other_total = 0
+    for cand in ['clinton', 'johnson', 'stein', 'mcmullin', 'other']:
+        other_total += table.aggregate(agate.Sum('{0}_votecount'.format(cand)))
 
-    charting_table = agate.Table(rows, column_names, column_types)
-
-    charting_table.bar_chart('group', 'difference', '60-20k-adjacent.svg')
-
-
+    return (trump_total / (trump_total + other_total)) * 100
 
 def write_csvs():
     include = [
@@ -92,8 +76,8 @@ def write_csvs():
         "Dollar difference for 60 year old with $40,000 income",
         "Dollar difference for 60 year old with $50,000 income",
         'RUCC_2013',
-        'trump_votepct',
-        'clinton_votepct'
+        'trump_votecount',
+        'clinton_votecount'
     ]
 
     ahca.select(include).to_csv('data/output/all.csv')
@@ -103,9 +87,15 @@ def write_csvs():
     small_towns.select(include).to_csv('data/output/town_counties.csv')
     metro.select(include).to_csv('data/output/metro_counties.csv')
 
-    urban_towns.select(include).to_csv('data/output/urban_town_counties.csv')
-    tiny_towns.select(include).to_csv('data/output/tiny_town_counties.csv')
-
 if __name__ == '__main__':
     print_breakdown()
     write_csvs()
+
+    # calculate_trump_pct(rural)
+
+    # ahca.select([
+    #     'ST',
+    #     'County',
+    #     "Dollar difference for 60 year old with $20,000 income",
+    #     'Population'
+    # ]).where(lambda r: r['ST'] == 'TX').order_by('Population', reverse=True).print_table(10)
