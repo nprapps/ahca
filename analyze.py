@@ -110,22 +110,23 @@ class WeightedScore(agate.Computation):
 
 
 def write_weighted_means_csv():
-    counties = [(rural_weighted, 'rural'), (small_towns_weighted, 'small_towns'), (metro_weighted, 'metro')]
-
     column_names = ['county_type']
     column_types = [text_type]
+    
     for age in ages:
         for income in incomes:
             column_names.append('weighted_mean_{0}yo_{1}k'.format(age, income))
             column_types.append(number_type)
 
+    county_types = [(rural_weighted, 'rural'), (small_towns_weighted, 'small_towns'), (metro_weighted, 'metro')]
+
     rows = []
-    for county in counties:
-        row = [county[1]]
-        total_population = county[0].aggregate(agate.Sum('Population'))
+    for county_type in county_types:
+        row = [county_type[1]]
+        total_population = county_type[0].aggregate(agate.Sum('Population'))
         for age in ages:
             for income in incomes:
-                score = county[0].aggregate(agate.Sum('weighted_score_{0}yo_{1}k'.format(age, income)))
+                score = county_type[0].aggregate(agate.Sum('weighted_score_{0}yo_{1}k'.format(age, income)))
                 row.append(score / total_population)
 
         rows.append(row)
@@ -133,7 +134,7 @@ def write_weighted_means_csv():
     table = agate.Table(rows, column_names, column_types).to_csv('data/output/weighted_means.csv')   
 
 if __name__ == '__main__':
-    # print_breakdown()
+    print_breakdown()
     # write_csvs()
 
     rural_weighted = rural.compute([
