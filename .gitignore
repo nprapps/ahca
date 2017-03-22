@@ -3,3 +3,4 @@
 data/*.csv
 data/output/*.csv
 *.svg
+!data/fixed_fips.csv
