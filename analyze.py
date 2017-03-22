@@ -6,7 +6,7 @@ specified_types = {
     'FIPS': text_type
 }
 
-ahca = agate.Table.from_csv('data/fixed_fips.csv', column_types=specified_types)
+ahca = agate.Table.from_csv('data/fixed_fips.csv', column_types=specified_types).where(lambda r: r['FIPS'] != '51515')
 
 # trump = ahca.where(lambda r: r['trump_votecount'] > r['clinton_votecount'])
 # clinton = ahca.where(lambda r: r['clinton_votecount'] > r['trump_votecount'])
@@ -137,7 +137,7 @@ def write_weighted_means_csv():
 
 if __name__ == '__main__':
     print_breakdown()
-    # write_csvs()
+    write_csvs()
 
     rural_weighted = rural.compute([
         ('weighted_score_27yo_20k', WeightedScore('Dollar difference for 27 year old with $20,000 income')),

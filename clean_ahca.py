@@ -19,9 +19,7 @@ with open('data/ahca.csv', 'w') as f:
                 if cell.row > 5:
                     if cell.column == 'A' and cell.value < 10000:
                         cell.value = '{0:05d}'.format(cell.value)
-                    if cell.value == '51515':
-                        continue
-
+                    
                 output_row.append(cell.value)
 
         writer.writerow(output_row)
