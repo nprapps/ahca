@@ -7,7 +7,7 @@ python election.py
 in2csv --no-inference -f xls data/original/ruralurbancodes2013.xls | csvcut -c FIPS,RUCC_2013 | csvformat -U 2 > data/codes.csv
 
 # join
-csvjoin -c FIPS data/ahca.csv data/census.csv data/codes.csv data/elex.csv > data/combined.csv
+csvjoin --left -c FIPS data/ahca.csv data/census.csv data/codes.csv data/elex.csv > data/combined.csv
 
 python fix_fips.py
 
