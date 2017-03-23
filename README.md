@@ -2,8 +2,6 @@
 
 This script processes data from a Kaiser Family Foundation analysis of AHCA health insurance subsidies, 2016 county-level election results, USDA Rural-Urban Continuum Codes and county-level Census data. Read the story [here](http://www.npr.org/2017/03/22/520317690/health-care-plan-championed-by-trump-hurts-counties-that-voted-for-him). 
 
-----------
-
 # How To Use This
 
 To run the analysis, first setup the repo.
@@ -20,8 +18,6 @@ bash process.sh
 ```
 
 Your output files will be in `data/output`.
-
-----------
 
 # Methodology
 
