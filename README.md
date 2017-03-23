@@ -1,6 +1,6 @@
 # What This Is
 
-This script processes data from a Kaiser Family Foundation analysis of AHCA health insurance subsidies, 2016 county-level election results, USDA Rural-Uruban Continuum Codes and county-level Census data.
+This script processes data from a Kaiser Family Foundation analysis of AHCA health insurance subsidies, 2016 county-level election results, USDA Rural-Urban Continuum Codes and county-level Census data. Read the story [here](http://www.npr.org/2017/03/22/520317690/health-care-plan-championed-by-trump-hurts-counties-that-voted-for-him). 
 
 ----------
 
