@@ -11,7 +11,5 @@ csvjoin --left -c FIPS data/ahca.csv data/census.csv data/codes.csv data/elex.cs
 
 python fix_fips.py
 
-# force fips codes to 
-
 # process
 python analyze.py
